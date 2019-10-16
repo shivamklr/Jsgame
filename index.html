@@ -22,40 +22,52 @@
 		var ctx = canvas.getContext('2d');
 		var x = canvas.width / 2;
 		var y = canvas.height - 30;
+		var paddleHeight = 10;
+		var paddleWidth = 75;
+		var paddleX = (canvas.width - paddleWidth) / 2;
+		var paddleY = canvas.height - paddleHeight;
 		console.log(x, y);
 		var dx = 2;
 		var dy = -2;
 		var ballRadius = 10;
+		
 		function drawBall() {
+			//This function displays ball on the canvas
 			ctx.beginPath();
 			ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
 			ctx.fillStyle = '#0095DD';
 			ctx.fill();
 			ctx.closePath();
 		}
+		
+		function drawPaddle() {
+			//This function displays paddle on the canvas
+			ctx.beginPath();
+			ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
+			ctx.fillStyle = '#0095DD';
+			ctx.fill();
+			ctx.closePath();
+		}
+		
 		function draw() {
+			/*First this function clears the screen then calls ball and paddle function to draw */
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			drawBall();
-			x += dx;
-			y += dy;
-			if (y + dy < ballRadius || y + dy > canvas.height-ballRadius) {
+			drawPaddle();
+			if (y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
 				console.log('i am y: ' + y);
 				dy = -dy;
 			}
-			if (x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+			if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
 				console.log('i am x: ' + x);
 				dx = -dx;
 			}
-		}
-		setInterval(draw, 10);
 
-		// ctx.beginPath();
-		// ctx.rect(2, 0, 50, 250);
-		// ctx.fillStyle = '#FF0000';
-		// ctx.fill();
-		// ctx.stroke();
-		// ctx.arc(100, 100, 20, 0, Math.PI*2 , false);
-		// ctx.fill();
-		// ctx.closePath();
+			x += dx;
+			y += dy;
+		}
+
+		setInterval(draw, 10); //Every 10ms the function draw is called.
+
 	</script>
 </html>
