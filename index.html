@@ -5,7 +5,7 @@
 		<style>
 			* {
 				padding: 0;
-				<title>gamedevworkshop</title>margin: 0;
+				margin: 0;
 			}
 			canvas {
 				background: #eee;
@@ -30,7 +30,28 @@
 		var dx = 2;
 		var dy = -2;
 		var ballRadius = 10;
-		
+		var rightPressed = false;
+		var leftPressed = false;
+
+		document.addEventListener('keydown', eventDown, false);
+		document.addEventListener('keyup', eventUp, false);
+
+		function eventDown(e) {
+			if (e.key == 'right' || e.key == 'ArrowRight') {
+				rightPressed = true;
+			}
+			if (e.key == 'left' || e.key == 'ArrowLeft') {
+				leftPressed = true;
+			}
+		}
+		function eventUp(e) {
+			if (e.key == 'right' || e.key == 'ArrowRight') {
+				rightPressed = false;
+			}
+			if (e.key == 'left' || e.key == 'ArrowLeft') {
+				leftPressed = false;
+			}
+		}
 		function drawBall() {
 			//This function displays ball on the canvas
 			ctx.beginPath();
@@ -39,7 +60,7 @@
 			ctx.fill();
 			ctx.closePath();
 		}
-		
+
 		function drawPaddle() {
 			//This function displays paddle on the canvas
 			ctx.beginPath();
@@ -48,9 +69,9 @@
 			ctx.fill();
 			ctx.closePath();
 		}
-		
+
 		function draw() {
-			/*First this function clears the screen then calls ball and paddle function to draw */
+			/*Clears the screen, calls ball and paddle function to draw, update paddle position */
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			drawBall();
 			drawPaddle();
@@ -62,12 +83,19 @@
 				console.log('i am x: ' + x);
 				dx = -dx;
 			}
-
+			if (rightPressed) {
+				paddleX += 7;
+				if (paddleX + paddleWidth > canvas.width) {
+					paddleX = canvas.width - paddleWidth;
+				}
+			} else if (leftPressed) {
+				paddleX -= 7;
+				if (paddleX < 0) paddleX = 0;
+			}
 			x += dx;
 			y += dy;
 		}
-
+		
 		setInterval(draw, 10); //Every 10ms the function draw is called.
-
 	</script>
 </html>
