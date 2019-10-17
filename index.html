@@ -20,23 +20,42 @@
 	<script>
 		var canvas = document.getElementById('myCanvas');
 		var ctx = canvas.getContext('2d');
+
 		var x = canvas.width / 2;
 		var y = canvas.height - 30;
+
 		var paddleHeight = 10;
 		var paddleWidth = 75;
 		var paddleX = (canvas.width - paddleWidth) / 2;
 		var paddleY = canvas.height - paddleHeight;
-		console.log(x, y);
+		//console.log(x, y);
+
+		var brickRowCount = 3;
+		var brickColumnCount = 5;
+		var brickWidth = 75;
+		var brickHeight = 20;
+		var brickPadding = 10;
+		var brickOffsetLeft = 30;
+		var brickOffsetTop = 30;
+		var bricks = [];
+		for (var c = 0; c < brickColumnCount; c++) {
+			bricks[c] = [];
+			for (var r = 0; r < brickRowCount; r++) {
+				bricks[c][r] = { x: 0, y: 0 };
+			}
+		}
+
 		var dx = 2;
 		var dy = -2;
 		var ballRadius = 10;
 		var rightPressed = false;
 		var leftPressed = false;
 
-		document.addEventListener('keydown', eventDown, false);
-		document.addEventListener('keyup', eventUp, false);
+		document.addEventListener('keydown', eventDown, false); // listens for any key presses
+		document.addEventListener('keyup', eventUp, false); //listens for any key releases
 
 		function eventDown(e) {
+			// This function is called whenever a key is pressed
 			if (e.key == 'right' || e.key == 'ArrowRight') {
 				rightPressed = true;
 			}
@@ -45,11 +64,25 @@
 			}
 		}
 		function eventUp(e) {
+			//This function is called whenever a key is released
 			if (e.key == 'right' || e.key == 'ArrowRight') {
 				rightPressed = false;
 			}
 			if (e.key == 'left' || e.key == 'ArrowLeft') {
 				leftPressed = false;
+			}
+		}
+		function drawBricks() {
+			for (var c = 0; c < brickColumnCount; c++) {
+				for (var r = 0; r < brickRowCount; r++) {
+					var brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+					var brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+					ctx.beginPath();
+					ctx.rect(brickX, brickY, brickWidth, brickHeight);
+					ctx.fillStyle = '#0095DD';
+					ctx.fill();
+					ctx.closePath();
+				}
 			}
 		}
 		function drawBall() {
@@ -73,13 +106,17 @@
 		function draw() {
 			/*Clears the screen, calls ball and paddle function to draw, update paddle position */
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			drawBricks();
 			drawBall();
 			drawPaddle();
-			if (y + dy < ballRadius) { //bouncing from the roof
+
+			if (y + dy < ballRadius) {
+				//bouncing from the roof
 				console.log('i am y: ' + y);
 				dy = -dy;
 			} else if (y + dy > canvas.height - ballRadius) {
-				if (x > paddleX && x < paddleX + paddleWidth) { //bouncing on paddle
+				if (x > paddleX && x < paddleX + paddleWidth) {
+					//bouncing on paddle
 					dy = -dy;
 				} else {
 					alert('Game Over');
@@ -87,7 +124,8 @@
 					clearInterval(interval);
 				}
 			}
-			if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {//bouncing from left and right wall
+			if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+				//bouncing from left and right wall
 				console.log('i am x: ' + x);
 				dx = -dx;
 			}
