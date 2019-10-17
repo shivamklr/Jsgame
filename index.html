@@ -24,6 +24,7 @@
 		var x = canvas.width / 2;
 		var y = canvas.height - 30;
 
+		var score = 0;
 		var paddleHeight = 10;
 		var paddleWidth = 75;
 		var paddleX = (canvas.width - paddleWidth) / 2;
@@ -68,6 +69,7 @@
 					) {
 						dy = -dy;
 						bricks[c][r].status = 0;
+						score++;
 					}
 				}
 			}
@@ -89,6 +91,11 @@
 			if (e.key == 'left' || e.key == 'ArrowLeft') {
 				leftPressed = false;
 			}
+		}
+		function drawScore() {
+			ctx.font = '16px Arial';
+			ctx.fillStyle = '#0095DD';
+			ctx.fillText('Scrore: ' + score, 8, 20);
 		}
 		function drawBricks() {
 			for (var c = 0; c < brickColumnCount; c++) {
@@ -132,6 +139,7 @@
 			drawBall();
 			drawPaddle();
 			collisionDetection();
+			drawScore();
 			if (y + dy < ballRadius) {
 				//bouncing from the roof
 				console.log('i am y: ' + y);
@@ -140,6 +148,9 @@
 				if (x > paddleX && x < paddleX + paddleWidth) {
 					//bouncing on paddle
 					dy = -dy;
+					//adding random x value for change
+					dx = dx + Math.floor(Math.random() * 6 -3);
+
 				} else {
 					alert('Game Over');
 					document.location.reload();
@@ -162,8 +173,14 @@
 			}
 			x += dx;
 			y += dy;
+			if (score == brickRowCount * brickColumnCount) {
+				console.log('Congratz you won');
+				alert('Congratz you Won');
+				document.location.reload();
+				clearInterval(interval);
+			}
 		}
 
-		var interval = setInterval(draw, 10); //Every 10ms the function draw is called.
+		var interval = setInterval(draw, 15); //Every 10ms the function draw is called.
 	</script>
 </html>
